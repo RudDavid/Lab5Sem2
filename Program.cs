@@ -12,7 +12,7 @@ namespace Lab5Sem2 {
 
     static void Main(string[] args) {
 
-      string userFolder, content;
+      string userFolder, content, regularString, newString;
       string[] listWithLincsFiles;
       bool isRun;
       Dictionary<string, string> wordBook;
@@ -22,7 +22,9 @@ namespace Lab5Sem2 {
       wordBook.Add("првиет", "привет");
       wordBook.Add("бобот", "робот");
       isRun = true;
-      
+      regularString = @"(\d\d\d)\s\d\d\d-\d\d-\d\d";
+      newString = "+380 12 345 67 89";
+
       while (isRun) {
         Console.Write("Enter path for folder: ");
         userFolder = Console.ReadLine();
@@ -30,7 +32,7 @@ namespace Lab5Sem2 {
         if (listWithLincsFiles.Length == 0) {
           throw new TextFileException("Wrong path or empty folder");
         }
-
+        
         for (int indexI = 0; indexI < listWithLincsFiles.Length; ++indexI) {
           content = File.ReadAllText(listWithLincsFiles[indexI]);
           
@@ -41,6 +43,9 @@ namespace Lab5Sem2 {
             }
           }
 
+          while (Regex.IsMatch(content, regularString)) {
+            content = Regex.Replace(content, regularString, newString);
+          }
         }
       }
     }
