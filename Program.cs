@@ -28,25 +28,30 @@ namespace Lab5Sem2 {
       while (isRun) {
         Console.Write("Enter path for folder: ");
         userFolder = Console.ReadLine();
-        listWithLincsFiles = Directory.GetFiles(userFolder);
+        listWithLincsFiles = Directory.GetFiles(userFolder, "*.txt");
         if (listWithLincsFiles.Length == 0) {
           throw new TextFileException("Wrong path or empty folder");
         }
-        
+
         for (int indexI = 0; indexI < listWithLincsFiles.Length; ++indexI) {
           content = File.ReadAllText(listWithLincsFiles[indexI]);
-          
-          foreach (var word in content) {
-            foreach (var incorrectword in wordBook) {
-              content = content.Replace(incorrectword.Key, incorrectword.Value);
-              File.WriteAllText(listWithLincsFiles[indexI], content);
-            }
+
+          foreach (var incorrectWord in wordBook) {
+            content = content.Replace(incorrectWord.Key, incorrectWord.Value);
           }
 
           while (Regex.IsMatch(content, regularString)) {
             content = Regex.Replace(content, regularString, newString);
           }
+
+          File.WriteAllText(listWithLincsFiles[indexI], content);
         }
+
+        Console.Write("The fix is ​​complete");
+        Console.WriteLine("\nPress any key to exit...");
+        Console.ReadKey();
+
+        isRun = false;
       }
     }
   }
